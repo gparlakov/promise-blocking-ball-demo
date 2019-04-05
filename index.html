@@ -22,45 +22,56 @@
 <ball></ball>
 
 <script>
-
-
-
 // promises
 let maxTries = 10;
 let counter = 0;
 
-function startPromise() {
+
+
+function promiseLoop() {
   if (counter < maxTries) {
-    console.log("promise");
+    console.log(counter);
     counter += 1;
     Promise.resolve().then(() => {      
-      startPromise();
+      promiseLoop();
     });
   }
 }
 
+
 const inputCount = document.getElementById('promise-count');
-const button = document.getElementById('run')
-button.onclick = function () {
+inputCount.focus();
+function runPromiseLoop() {
   counter = 0;
   const val = parseInt(inputCount.value);
   maxTries = isNaN(val) ? maxTries : val;
-  startPromise();
+  promiseLoop();
+}
+
+const button = document.getElementById('run')
+button.onclick = runPromiseLoop();
+
+inputCount.onkeyup = function(key) {    
+    if(key.key == "Enter") {
+        runPromiseLoop();    
+    }
 }
 
 
+</script>
+<script>
 
- // ball js animation
- const ball = document.getElementsByTagName('ball')[0];
+// ball js animation
+const ball = document.getElementsByTagName('ball')[0];
 function bounce() {
 
   let out = ball.getBoundingClientRect().top >= window.innerHeight;
-  ball.style.top = (out ? 0 : ball.getBoundingClientRect().top + 1) + "px";
+  ball.style.top = (out ? 0 : ball.getBoundingClientRect().top + 1.5) + "px";
 }
 const intervalId = setInterval(() => {
   // console.log('animation',ball.getBoundingClientRect().top, ball.style.top);
   bounce();  
-}, 30);
+}, 16);
 
 // if stop ball button rendered
 const stopBallButton = document.getElementById('stop-ball')
