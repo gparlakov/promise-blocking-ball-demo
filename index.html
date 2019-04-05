@@ -1,5 +1,72 @@
-<input id="promise-count"/>
+<html>
+<head>
+    <style>
+        ball {
+            z-index:2;
+            display: block; 
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: fixed;
+            left:calc(50vw - 25px);
+            border:1px solid rgba(0,0,0,0.3);
+            box-shadow: inset 0 -15px 15px -5px rgba(0,0,0,0.2);
+            background-color: 'deepskyblue';
+        }
+    </style>
+</head>
+<body><input id="promise-count"/>
 <button id="run">Starts</button>
 <!-- <button id="stop-ball">stop ball</button> -->
 
 <ball></ball>
+
+<script>
+
+
+
+// promises
+let maxTries = 10;
+let counter = 0;
+
+function startPromise() {
+  if (counter < maxTries) {
+    console.log("promise");
+    counter += 1;
+    Promise.resolve().then(() => {      
+      startPromise();
+    });
+  }
+}
+
+const inputCount = document.getElementById('promise-count');
+const button = document.getElementById('run')
+button.onclick = function () {
+  counter = 0;
+  const val = parseInt(inputCount.value);
+  maxTries = isNaN(val) ? maxTries : val;
+  startPromise();
+}
+
+
+
+ // ball js animation
+ const ball = document.getElementsByTagName('ball')[0];
+function bounce() {
+
+  let out = ball.getBoundingClientRect().top >= window.innerHeight;
+  ball.style.top = (out ? 0 : ball.getBoundingClientRect().top + 1) + "px";
+}
+const intervalId = setInterval(() => {
+  // console.log('animation',ball.getBoundingClientRect().top, ball.style.top);
+  bounce();  
+}, 30);
+
+// if stop ball button rendered
+const stopBallButton = document.getElementById('stop-ball')
+stopBallButton && (stopBallButton.onclick = function() {
+  clearInterval(intervalId);
+});
+</script>
+</body>
+</html>
