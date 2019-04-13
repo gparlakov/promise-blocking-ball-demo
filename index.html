@@ -18,7 +18,7 @@
 <body><input id="promise-count"/>
 <button id="run">Starts</button>
 <!-- <button id="stop-ball">stop ball</button> -->
-
+<button id="toggle">Toggle recursive/immediate</button>
 <ball></ball>
 
 <script>
@@ -27,16 +27,25 @@
 // loop parameters
 let maxTries = 10;
 let counter = 0;
+let recursive = true;
 
 
 function promiseLoop() {
   if (counter < maxTries) {
     console.log(counter);
     counter += 1;
-    // schedule a new promise immediately
+    // schedule a new promise immediately after previous resolves
     Promise.resolve().then(() => {
       promiseLoop();
     });
+  }
+}
+
+function promiseQueue() {
+  while (counter < maxTries) {
+    counter += 1;
+    // schedule a new promise immediately after previous resolves
+    Promise.resolve().then(() => console.log(counter));
   }
 }
 
@@ -47,7 +56,11 @@ function runPromiseLoop() {
   counter = 0;
   const val = parseInt(inputCount.value);
   maxTries = isNaN(val) ? maxTries : val;
-  promiseLoop();
+  if(recursive) {
+    promiseLoop();
+  } else {
+    promiseQueue();
+  }
 }
 
 const button = document.getElementById('run');
