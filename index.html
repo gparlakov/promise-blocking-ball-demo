@@ -18,7 +18,7 @@
 <body><input id="promise-count"/>
 <button id="run">Starts</button>
 <!-- <button id="stop-ball">stop ball</button> -->
-<button id="toggle">Toggle recursive/immediate</button>
+<button id="toggle">Toggle Immediate</button>
 <ball></ball>
 
 <script>
@@ -72,8 +72,9 @@ inputCount.onkeyup = function(key) {
     }
 }
 
-document.getElementById('toggle').onclick = () => {
+document.getElementById('toggle').onclick = (ev) => {
   recursive = !recursive;
+  ev.target.innerHTML = recursive ? 'Toggle Immediate' : 'Toggle Recursive';
 }
 
 
