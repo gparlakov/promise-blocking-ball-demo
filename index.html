@@ -84,22 +84,20 @@ document.getElementById('toggle').onclick = (ev) => {
 // ball js animation
 const ball = document.getElementsByTagName('ball')[0];
 
-function bounce() {
+function ballIncrementPosition() {
   let out = ball.getBoundingClientRect().top >= window.innerHeight;
   ball.style.top = (out ? 0 : ball.getBoundingClientRect().top + 1.5) + "px";
 }
 
-
-
-
 // LOOP with REQUEST ANIMATION FRAME
 function ballLoop() {
   requestAnimationFrame(() => {
-    bounce();
+    ballIncrementPosition();
     ballLoop();
   })
+  // uncomment to do two increments in the `next` js cycle
   // requestAnimationFrame(() => {
-  //   bounce();
+  //   ballIncrementPosition();
   // })
 }
 ballLoop();
@@ -108,9 +106,10 @@ ballLoop();
 
 
 // LOOP with SET INTERVAL
+// comment the above ball loop and uncomment the below code to see ball looping using the event loop (macrotask queue)
 // const intervalId = setInterval(() => {
 //   // console.log('animation',ball.getBoundingClientRect().top, ball.style.top);
-//   bounce();
+//   ballIncrementPosition();
 // }, 16);
 
 // if stop ball button rendered
