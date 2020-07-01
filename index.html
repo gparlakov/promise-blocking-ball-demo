@@ -26,12 +26,12 @@
       // promises
 
       // loop parameters
-      let maxTries = 10;
+      let n = 10;
       let counter = 0;
       let recursive = true;
 
       function promiseLoop() {
-        if (counter < maxTries) {
+        if (counter < n) {
           console.log(counter);
           counter += 1;
           // schedule a new promise immediately after previous resolves
@@ -42,7 +42,7 @@
       }
 
       function promiseQueue() {
-        while (counter < maxTries) {
+        while (counter < n) {
           counter += 1;
           // schedule a new promise immediately after previous resolves
           Promise.resolve().then(() => console.log(counter));
@@ -52,10 +52,11 @@
       // control the loop
       const inputCount = document.getElementById('promise-count');
       inputCount.focus();
+      inputCount.value = n;
       function runPromiseLoop() {
         counter = 0;
         const val = parseInt(inputCount.value);
-        maxTries = isNaN(val) ? maxTries : val;
+        n = isNaN(val) ? n : val;
         if (recursive) {
           promiseLoop();
         } else {
