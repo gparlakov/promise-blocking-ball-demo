@@ -16,6 +16,7 @@
     </style>
   </head>
   <body>
+    <span>Promises <sup>microtasks</sup> to queue</span>
     <input id="promise-count" />
     <button id="run">Starts</button>
     <!-- <button id="stop-ball">stop ball</button> -->
@@ -26,10 +27,11 @@
       // promises
 
       // loop parameters
-      let n = 10;
+      let n = 1000;
       let counter = 0;
       let recursive = true;
 
+      // queues 1 microtask `n` times recursively
       function promiseLoop() {
         if (counter < n) {
           console.log(counter);
@@ -41,6 +43,7 @@
         }
       }
 
+      // queues `n` microtasks
       function promiseQueue() {
         while (counter < n) {
           counter += 1;
@@ -75,7 +78,8 @@
 
       document.getElementById('toggle').onclick = ev => {
         recursive = !recursive;
-        ev.target.innerHTML = recursive ? 'Toggle Immediate' : 'Toggle Recursive';
+        ev.target.innerHTML = recursive ? 'Toggle consecutive' : 'Toggle Recursive';
+        ev.target.title = recursive ? 'Now recursive' : 'Now consecutive' 
       };
     </script>
     <script>
