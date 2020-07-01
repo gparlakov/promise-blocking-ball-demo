@@ -34,10 +34,10 @@
       // queues 1 microtask `n` times recursively
       function promiseLoop() {
         if (counter < n) {
-          console.log('loop');
           counter += 1;
           // schedule a new promise immediately after previous resolves
           Promise.resolve().then(() => {
+            console.log('loop');
             promiseLoop();
           });
         }
