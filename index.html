@@ -20,7 +20,7 @@
     <input id="promise-count" />
     <button id="run">Starts</button>
     <!-- <button id="stop-ball">stop ball</button> -->
-    <button id="toggle">Toggle Immediate</button>
+    <button id="toggle" title="Currently recursive">Toggle consecutive</button>
     <ball></ball>
 
     <script>
@@ -34,7 +34,7 @@
       // queues 1 microtask `n` times recursively
       function promiseLoop() {
         if (counter < n) {
-          console.log(counter);
+          console.log('loop');
           counter += 1;
           // schedule a new promise immediately after previous resolves
           Promise.resolve().then(() => {
@@ -48,7 +48,7 @@
         while (counter < n) {
           counter += 1;
           // schedule a new promise immediately after previous resolves
-          Promise.resolve().then(() => console.log(counter));
+          Promise.resolve().then(() => console.log('consecutive'));
         }
       }
 
