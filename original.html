@@ -1,0 +1,120 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="ball.css"/>
+  </head>
+  <body>
+    <span>Promises <sup>microtasks</sup> to queue</span>
+    <input id="promise-count" />
+    <button id="run">Go</button>
+    <!-- <button id="stop-ball">stop ball</button> -->
+    <button id="toggle" title="Currently recursive">Toggle consecutive</button>
+    <ball></ball>
+
+    <script>
+      // promises
+
+      // loop parameters
+      let n = 1000;
+      let counter = 0;
+      let recursive = true;
+
+      // queues 1 microtask `n` times recursively
+      function promiseLoop() {
+        if (counter < n) {
+          counter += 1;
+          // schedule a new promise immediately after previous resolves
+          Promise.resolve().then(() => {
+            if(counter % 1000 === 0) {
+              console.log('1000 x loops')
+            }
+            promiseLoop();
+          });
+        }
+      }
+
+      // queues `n` microtasks
+      function promiseQueue() {
+        while (counter < n) {
+          counter += 1;
+          // schedule a new promise immediately after previous resolves
+          Promise.resolve().then(() => {
+            if(counter % 1000 === 0) {
+              console.log('consecutive')
+            }
+          });
+        }
+      }
+
+      // control the loop
+      const inputCount = document.getElementById('promise-count');
+      inputCount.focus();
+      inputCount.value = n;
+      function runPromiseLoop() {
+        counter = 0;
+        const val = parseInt(inputCount.value);
+        n = isNaN(val) ? n : val;
+        if (recursive) {
+          promiseLoop();
+        } else {
+          promiseQueue();
+        }
+      }
+
+      const button = document.getElementById('run');
+      button.onclick = runPromiseLoop;
+
+      inputCount.onkeyup = function(key) {
+        if (key.key == 'Enter') {
+          runPromiseLoop();
+        }
+      };
+
+      document.getElementById('toggle').onclick = ev => {
+        recursive = !recursive;
+        ev.target.innerHTML = recursive ? 'Toggle consecutive' : 'Toggle recursive';
+        ev.target.title = recursive ? 'Now recursive' : 'Now consecutive' 
+      };
+    </script>
+    <script>
+      // ball js animation
+      const ball = document.getElementsByTagName('ball')[0];
+
+      let direction = 1;
+      function bounce() {
+        const rect = ball.getBoundingClientRect();
+        let out = rect.top + 50 >= window.innerHeight || ball.getBoundingClientRect().top <= 0;
+        if (out) {
+          direction *= -1;
+        }
+        ball.style.top = ball.getBoundingClientRect().top + 1.5 * direction + 'px';
+      }
+
+      // LOOP with REQUEST ANIMATION FRAME
+      function ballLoop() {
+        requestAnimationFrame(() => {
+          bounce();
+          ballLoop();
+        });
+        // uncomment to do two increments in the `next` js cycle
+        // requestAnimationFrame(() => {
+        //   bounce();
+        // })
+      }
+      ballLoop();
+
+      // LOOP with SET INTERVAL
+      // comment the above ball loop and uncomment the below code to see ball looping using the event loop (macrotask queue)
+      // const intervalId = setInterval(() => {
+      //   // console.log('animation',ball.getBoundingClientRect().top, ball.style.top);
+      //   bounce();
+      // }, 16);
+
+      // if stop ball button rendered
+      const stopBallButton = document.getElementById('stop-ball');
+      stopBallButton &&
+        (stopBallButton.onclick = function() {
+          clearInterval(intervalId);
+        });
+    </script>
+  </body>
+</html>

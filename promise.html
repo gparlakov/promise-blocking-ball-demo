@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="ball.css"/>
+  </head>
+  <body>
+    <span>Promises <sup>microtasks</sup> to queue</span>
+    <input id="promise-count" />
+    <button id="run">Go</button>
+    <ball></ball>
+
+    <script>
+      // promises
+
+      // loop parameters
+      let n = 1000;
+      let counter = 0;
+
+      // queues `n` microtasks
+      function promiseQueue() {
+        while (counter < n) {
+          counter += 1;
+          // schedule a new promise immediately after previous resolves
+          Promise.resolve().then(() => {
+            if(counter % 1000 === 0) {
+              console.log('1000 x consecutive');
+            }
+          });
+        }
+      }
+
+      // control the loop
+      const inputCount = document.getElementById('promise-count');
+      inputCount.focus();
+      inputCount.value = n;
+      function runPromiseLoop() {
+        counter = 0;
+        const val = parseInt(inputCount.value);
+        n = isNaN(val) ? n : val;
+        promiseQueue();
+      }
+
+      const button = document.getElementById('run');
+      button.onclick = runPromiseLoop;
+
+      inputCount.onkeyup = function(key) {
+        if (key.key == 'Enter') {
+          runPromiseLoop();
+        }
+      };
+    </script>
+    <script src="animate-ball.js"></script>
+  </body>
+</html>
