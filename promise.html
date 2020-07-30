@@ -20,9 +20,9 @@
         while (counter < n) {
           counter += 1;
           // schedule a new promise immediately after previous resolves
-          Promise.resolve().then(() => {
-            if(counter % 1000 === 0) {
-              console.log('1000 x consecutive');
+          Promise.resolve(counter).then(c => {
+            if(c % 1000 === 0) {
+              console.log('1000 x consecutive promises resolved');
             }
           });
         }
