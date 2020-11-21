@@ -10,6 +10,10 @@
 
     <script>
       // promises
+      console.clear();
+      setTimeout(t => console.log('immediate timeout'), 0);
+      new Promise(resolve => resolve('immediate promise')).then(console.log);
+      console.log('after all')
 
       // loop parameters
       let n = 1000;
@@ -19,9 +23,9 @@
       function promiseQueue() {
         while (counter < n) {
           counter += 1;
-          // schedule a new promise immediately after previous resolves
           Promise.resolve(counter).then(c => {
             if(c % 1000 === 0) {
+              // log once every 1000 callbacks because console.log itself is a slow operation
               console.log('1000 x consecutive promises resolved');
             }
           });
@@ -29,6 +33,7 @@
       }
 
       // control the loop
+      // via the button
       const inputCount = document.getElementById('promise-count');
       inputCount.focus();
       inputCount.value = n;
@@ -39,9 +44,10 @@
         promiseQueue();
       }
 
+      // click handler
       const button = document.getElementById('run');
       button.onclick = runPromiseLoop;
-
+      // on enter key up handler
       inputCount.onkeyup = function(key) {
         if (key.key == 'Enter') {
           runPromiseLoop();
